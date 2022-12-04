@@ -25,7 +25,7 @@ alphabet = {
     "X": 20,
     "Y": 21,
     "Z": 22,
-}
+}  # aphabet f authorised letters
 
 
 def isValid(immatriculation):
@@ -36,6 +36,8 @@ def isValid(immatriculation):
         - ZZ are two letters
 
         is valid
+
+        if the format is not correct, also returns False
         """
     if not re.match("^\D{2}-\d{3}-\D{2}$", immatriculation):
         return False
@@ -58,16 +60,24 @@ def computeValue(immatriculation: str):
     else:
         first_letters, number, last_letters = [_.upper() for _ in immatriculation.split("-")]
 
+        # number block
+
         value = int(number)
 
+        # last letter block
         value += alphabet[last_letters[1]] * 999
         value += alphabet[last_letters[0]] * len(alphabet) * 999
 
+        # removing values corresponding to forbidden combination of letters
         if last_letters > "SS":
             value -= 999
 
+        # first letter block
+
         value += alphabet[first_letters[1]] * 999 * (len(alphabet) ** 2 - 1)
         value += alphabet[first_letters[0]] * 999 * (len(alphabet) ** 2 - 1) * len(alphabet)
+
+        # removing values corresponding to forbidden combination of letters
 
         if first_letters >= "SS":
             value -= 999 * (23 * 23 - 1)
